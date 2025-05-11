@@ -33,14 +33,15 @@ func main() {
 
 	// Инициализация сервисов
 	smtpService := services.NewSMTPService()
+	cbrService := services.NewCBRService()
 	userService := services.NewUserService(userRepo, smtpService)
 	accountService := services.NewAccountService(accountRepo)
 	cardService := services.NewCardService(cardRepo)
 	transferService := services.NewTransferService(transferRepo, accountRepo)
-	creditService := services.NewCreditService(creditRepo)
+	creditService := services.NewCreditService(creditRepo, userRepo, cbrService, smtpService)
 	paymentService := services.NewPaymentService(paymentRepo, creditRepo, accountRepo, userRepo, smtpService)
 	analyticsService := services.NewAnalyticsService(analyticsRepo)
-	cbrService := services.NewCBRService()
+
 
 	// Инициализация шедулера
 	schedulerService := services.NewSchedulerService(paymentService)

@@ -76,3 +76,18 @@ func (s *SMTPService) SendOverduePaymentNotification(userEmail string, amount fl
 	// Отправляем письмо
 	return s.SendEmail(userEmail, "Просроченный платеж", content)
 }
+
+func (s *SMTPService) SendCreditNotification(userEmail string, amount, interestRate float64, term int) error {
+	// Создаем тело письма
+	content := fmt.Sprintf(`
+		<h1>Кредит успешно оформлен!</h1>
+		<p>Сумма: <strong>%.2f RUB</strong></p>
+		<p>Процентная ставка: <strong>%.2f%%</strong></p>
+		<p>Срок: <strong>%d месяцев</strong></p>
+		<p>Дата: %s</p>
+		<small>Это автоматическое уведомление</small>
+	`, amount, interestRate, term, time.Now().Format("02.01.2006 15:04:05"))
+
+	// Отправляем письмо
+	return s.SendEmail(userEmail, "Кредит успешно оформлен", content)
+}

@@ -23,9 +23,8 @@ func (h *CreditHandler) CreateCredit(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value("userID").(uint)
 
 	var request struct {
-		Amount       float64 `json:"amount"`
-		InterestRate float64 `json:"interest_rate"`
-		Term         int     `json:"term"`
+		Amount float64 `json:"amount"`
+		Term   int     `json:"term"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
@@ -33,7 +32,7 @@ func (h *CreditHandler) CreateCredit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	credit, err := h.service.CreateCredit(userID, request.Amount, request.InterestRate, request.Term)
+	credit, err := h.service.CreateCredit(userID, request.Amount, request.Term)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
