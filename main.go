@@ -20,13 +20,20 @@ func main() {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
 
+	// Инициализация репозиториев
 	userRepo := repositories.NewUserRepository(db)
-	userService := services.NewUserService(userRepo)
-	userHandler := handlers.NewUserHandler(userService)
-
 	accountRepo := repositories.NewAccountRepository(db)
+	cardRepo := repositories.NewCardRepository(db)
+
+	// Инициализация сервисов
+	userService := services.NewUserService(userRepo)
 	accountService := services.NewAccountService(accountRepo)
+	cardService := services.NewCardService(cardRepo)
+
+	// Инициализация обработчиков
+	userHandler := handlers.NewUserHandler(userService)
 	accountHandler := handlers.NewAccountHandler(accountService)
+	cardHandler := handlers.NewCardHandler(cardService)
 
 	r := mux.NewRouter()
 
@@ -41,6 +48,12 @@ func main() {
 	// Управление счетами
 	authRouter.HandleFunc("/accounts", accountHandler.CreateAccount).Methods("POST")
 	authRouter.HandleFunc("/accounts", accountHandler.GetUserAccounts).Methods("GET")
+
+	// Управление картами
+	authRouter.HandleFunc("/accounts/{account_id}/cards", cardHandler.CreateCard).Methods("POST")
+	authRouter.HandleFunc("/accounts/{account_id}/cards", cardHandler.GetAccountCards).Methods("GET")
+	authRouter.HandleFunc("/cards/{card_id}", cardHandler.GetCard).Methods("GET")
+	authRouter.HandleFunc("/cards/{card_id}", cardHandler.DeleteCard).Methods("DELETE")
 
 	log.Println("Server is running on :8080")
 	http.ListenAndServe(":8080", r)

@@ -51,7 +51,7 @@ func InitDB(db *sql.DB) error {
 		id SERIAL PRIMARY KEY,
 		account_id INTEGER REFERENCES accounts(id) ON DELETE CASCADE,
 		number VARCHAR(16) NOT NULL,
-		cvv VARCHAR(3) NOT NULL,
+		cvv VARCHAR(60) NOT NULL,
 		expiry VARCHAR(5) NOT NULL,
 		hmac VARCHAR(64) NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
