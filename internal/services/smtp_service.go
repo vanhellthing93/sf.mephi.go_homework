@@ -62,3 +62,17 @@ func (s *SMTPService) SendRegistrationNotification(userEmail string) error {
 	// Отправляем письмо
 	return s.SendEmail(userEmail, "Регистрация в банковском сервисе", content)
 }
+
+func (s *SMTPService) SendOverduePaymentNotification(userEmail string, amount float64) error {
+	// Создаем тело письма
+	content := fmt.Sprintf(`
+		<h1>У вас есть просроченный платеж!</h1>
+		<p>Сумма: <strong>%.2f RUB</strong></p>
+		<p>Пожалуйста, погасите задолженность как можно скорее.</p>
+		<p>Дата: %s</p>
+		<small>Это автоматическое уведомление</small>
+	`, amount, time.Now().Format("02.01.2006 15:04:05"))
+
+	// Отправляем письмо
+	return s.SendEmail(userEmail, "Просроченный платеж", content)
+}

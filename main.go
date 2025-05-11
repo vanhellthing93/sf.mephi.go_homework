@@ -38,12 +38,13 @@ func main() {
 	cardService := services.NewCardService(cardRepo)
 	transferService := services.NewTransferService(transferRepo, accountRepo)
 	creditService := services.NewCreditService(creditRepo)
-	paymentService := services.NewPaymentService(paymentRepo, creditRepo, accountRepo)
+	paymentService := services.NewPaymentService(paymentRepo, creditRepo, accountRepo, userRepo, smtpService)
 	analyticsService := services.NewAnalyticsService(analyticsRepo)
 	cbrService := services.NewCBRService()
 
-
-
+	// Инициализация шедулера
+	schedulerService := services.NewSchedulerService(paymentService)
+	schedulerService.Start()
 
 	// Инициализация обработчиков
 	userHandler := handlers.NewUserHandler(userService)

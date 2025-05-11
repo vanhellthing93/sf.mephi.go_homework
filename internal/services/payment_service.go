@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
@@ -12,13 +13,17 @@ type PaymentService struct {
 	repo         *repositories.PaymentRepository
 	creditRepo   *repositories.CreditRepository
 	accountRepo  *repositories.AccountRepository
+	userRepo	 *repositories.UserRepository
+	smtpService  *SMTPService
 }
 
-func NewPaymentService(repo *repositories.PaymentRepository, creditRepo *repositories.CreditRepository, accountRepo *repositories.AccountRepository) *PaymentService {
+func NewPaymentService(repo *repositories.PaymentRepository, creditRepo *repositories.CreditRepository, accountRepo *repositories.AccountRepository, userRepo *repositories.UserRepository, smtpService *SMTPService) *PaymentService {
 	return &PaymentService{
 		repo:         repo,
 		creditRepo:   creditRepo,
 		accountRepo:  accountRepo,
+		userRepo: userRepo,
+		smtpService:  smtpService,
 	}
 }
 
@@ -131,12 +136,32 @@ func (s *PaymentService) ProcessOverduePayments() error {
 	for _, payment := range payments {
 		// Начисляем штраф
 		if err := s.applyPenalty(payment); err != nil {
-			return fmt.Errorf("failed to apply penalty: %v", err)
+			log.Printf("Failed to apply penalty for payment %d: %v", payment.ID, err)
+			continue
 		}
 
 		// Обновляем статус платежа
 		if err := s.repo.UpdatePaymentStatus(payment.ID, "failed"); err != nil {
-			return fmt.Errorf("failed to update payment status: %v", err)
+			log.Printf("Failed to update payment status for payment %d: %v", payment.ID, err)
+			continue
+		}
+
+		// Получаем пользователя
+		credit, err := s.creditRepo.GetCreditByID(payment.CreditID)
+		if err != nil {
+			log.Printf("Failed to get credit for payment %d: %v", payment.ID, err)
+			continue
+		}
+
+		user, err := s.userRepo.GetUserByID(credit.UserID)
+		if err != nil {
+			log.Printf("Failed to get user for payment %d: %v", payment.ID, err)
+			continue
+		}
+
+		// Отправляем уведомление о просроченном платеже
+		if err := s.smtpService.SendOverduePaymentNotification(user.Email, payment.Amount); err != nil {
+			log.Printf("Failed to send overdue payment notification for payment %d: %v", payment.ID, err)
 		}
 	}
 
