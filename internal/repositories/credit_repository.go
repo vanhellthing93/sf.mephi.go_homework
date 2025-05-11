@@ -122,3 +122,9 @@ func calculateMonthlyPayment(amount, interestRate float64, term int) float64 {
 	monthlyRate := interestRate / 12 / 100
 	return amount * monthlyRate * math.Pow(1+monthlyRate, float64(term)) / (math.Pow(1+monthlyRate, float64(term)) - 1)
 }
+
+func (r *CreditRepository) UpdatePaymentScheduleStatus(paymentID uint, isPaid bool) error {
+	query := `UPDATE payment_schedules SET is_paid=$1 WHERE id=$2`
+	_, err := r.DB.Exec(query, isPaid, paymentID)
+	return err
+}

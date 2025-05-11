@@ -106,5 +106,20 @@ func InitDB(db *sql.DB) error {
 		return err
 	}
 
+	// Создание таблицы платежей
+	createPaymentsTableQuery := `
+	CREATE TABLE IF NOT EXISTS payments (
+		id SERIAL PRIMARY KEY,
+		credit_id INTEGER REFERENCES credits(id) ON DELETE CASCADE,
+		amount DECIMAL(15, 2) NOT NULL,
+		payment_date TIMESTAMP NOT NULL,
+		status VARCHAR(20) NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	);
+	`
+	if _, err := db.Exec(createPaymentsTableQuery); err != nil {
+		return err
+	}
+
 	return nil
 }

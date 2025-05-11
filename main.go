@@ -26,6 +26,7 @@ func main() {
 	cardRepo := repositories.NewCardRepository(db)
 	transferRepo := repositories.NewTransferRepository(db)
 	creditRepo := repositories.NewCreditRepository(db)
+	paymentRepo := repositories.NewPaymentRepository(db)
 
 
 
@@ -35,7 +36,8 @@ func main() {
 	cardService := services.NewCardService(cardRepo)
 	transferService := services.NewTransferService(transferRepo, accountRepo)
 	creditService := services.NewCreditService(creditRepo)
-	
+	paymentService := services.NewPaymentService(paymentRepo, creditRepo, accountRepo)
+
 
 
 
@@ -45,6 +47,7 @@ func main() {
 	cardHandler := handlers.NewCardHandler(cardService)
 	transferHandler := handlers.NewTransferHandler(transferService)
 	creditHandler := handlers.NewCreditHandler(creditService)
+	paymentHandler := handlers.NewPaymentHandler(paymentService)
 
 
 
@@ -77,7 +80,12 @@ func main() {
 	authRouter.HandleFunc("/credits", creditHandler.CreateCredit).Methods("POST")
 	authRouter.HandleFunc("/credits", creditHandler.GetUserCredits).Methods("GET")
 	authRouter.HandleFunc("/credits/{credit_id}/schedule", creditHandler.GetPaymentSchedule).Methods("GET")
-	
+
+	// Управление платежами
+	authRouter.HandleFunc("/credits/{credit_id}/payments", paymentHandler.CreatePayment).Methods("POST")
+	authRouter.HandleFunc("/credits/{credit_id}/payments", paymentHandler.GetCreditPayments).Methods("GET")
+	authRouter.HandleFunc("/payments/{payment_id}", paymentHandler.GetPayment).Methods("GET")
+
 
 	log.Println("Server is running on :8080")
 	http.ListenAndServe(":8080", r)
