@@ -3,11 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/services"
-	"github.com/golang-jwt/jwt/v5"
 )
 
 type UserHandler struct {
@@ -59,7 +60,7 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 // Генерация JWT токена
 func GenerateJWTToken(userID uint) (string, error) {
 	claims := jwt.RegisteredClaims{
-		Subject:   string(userID),
+		Subject:   strconv.Itoa(int(userID)),
 		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 		IssuedAt:  jwt.NewNumericDate(time.Now()),
 	}
