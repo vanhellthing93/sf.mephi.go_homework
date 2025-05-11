@@ -24,16 +24,22 @@ func main() {
 	userRepo := repositories.NewUserRepository(db)
 	accountRepo := repositories.NewAccountRepository(db)
 	cardRepo := repositories.NewCardRepository(db)
+	transferRepo := repositories.NewTransferRepository(db)
+
 
 	// Инициализация сервисов
 	userService := services.NewUserService(userRepo)
 	accountService := services.NewAccountService(accountRepo)
 	cardService := services.NewCardService(cardRepo)
+	transferService := services.NewTransferService(transferRepo, accountRepo)
+
 
 	// Инициализация обработчиков
 	userHandler := handlers.NewUserHandler(userService)
 	accountHandler := handlers.NewAccountHandler(accountService)
 	cardHandler := handlers.NewCardHandler(cardService)
+	transferHandler := handlers.NewTransferHandler(transferService)
+
 
 	r := mux.NewRouter()
 
@@ -54,6 +60,12 @@ func main() {
 	authRouter.HandleFunc("/accounts/{account_id}/cards", cardHandler.GetAccountCards).Methods("GET")
 	authRouter.HandleFunc("/cards/{card_id}", cardHandler.GetCard).Methods("GET")
 	authRouter.HandleFunc("/cards/{card_id}", cardHandler.DeleteCard).Methods("DELETE")
+
+	// Управление переводами
+	authRouter.HandleFunc("/accounts/{from_account_id}/transfers", transferHandler.CreateTransfer).Methods("POST")
+	authRouter.HandleFunc("/accounts/{account_id}/transfers", transferHandler.GetAccountTransfers).Methods("GET")
+	authRouter.HandleFunc("/transfers/{transfer_id}", transferHandler.GetTransfer).Methods("GET")
+	
 
 	log.Println("Server is running on :8080")
 	http.ListenAndServe(":8080", r)

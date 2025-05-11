@@ -30,3 +30,7 @@ func (s *AccountService) CreateAccount(userID uint, currency string) (*models.Ac
 func (s *AccountService) GetAccountsByUserID(userID uint) ([]models.Account, error) {
 	return s.repo.GetAccountsByUserID(userID)
 }
+
+func (s *AccountService) GetAccountByID(accountID uint) (*models.Account, error) {
+    return s.repo.GetAccountByID(accountID)
+}

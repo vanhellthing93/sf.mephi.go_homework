@@ -2,6 +2,8 @@ package repositories
 
 import (
 	"database/sql"
+	"fmt"
+
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
 )
 
@@ -39,4 +41,14 @@ func (r *AccountRepository) GetAccountsByUserID(userID uint) ([]models.Account, 
 		accounts = append(accounts, account)
 	}
 	return accounts, nil
+}
+
+func (r *AccountRepository) GetAccountByID(accountID uint) (*models.Account, error) {
+    var account models.Account
+    query := `SELECT id, user_id, balance, currency, created_at FROM accounts WHERE id=$1`
+    err := r.DB.QueryRow(query, accountID).Scan(&account.ID, &account.UserID, &account.Balance, &account.Currency, &account.CreatedAt)
+    if err != nil {
+        return nil, fmt.Errorf("failed to get account: %v", err)
+    }
+    return &account, nil
 }
