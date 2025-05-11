@@ -2,6 +2,8 @@ package services
 
 import (
 	"errors"
+	"fmt"
+	"log"
 	"time"
 
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
@@ -9,11 +11,15 @@ import (
 )
 
 type UserService struct {
-	repo *repositories.UserRepository
+	repo        *repositories.UserRepository
+	smtpService *SMTPService
 }
 
-func NewUserService(repo *repositories.UserRepository) *UserService {
-	return &UserService{repo: repo}
+func NewUserService(repo *repositories.UserRepository, smtpService *SMTPService) *UserService {
+	return &UserService{
+		repo:        repo,
+		smtpService: smtpService,
+	}
 }
 
 // Регистрация пользователя
@@ -28,7 +34,16 @@ func (s *UserService) RegisterUser(user *models.User) error {
 		return err
 	}
 	user.CreatedAt = time.Now()
-	return s.repo.CreateUser(user)
+
+	if err := s.repo.CreateUser(user); err != nil {
+		return fmt.Errorf("failed to create user: %v", err)
+	}
+
+	if err := s.smtpService.SendRegistrationNotification(user.Email); err != nil {
+		log.Printf("Failed to send registration notification: %v", err)
+	}
+
+	return nil
 }
 
 // Аутентификация пользователя

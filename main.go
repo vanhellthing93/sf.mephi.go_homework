@@ -32,7 +32,8 @@ func main() {
 
 
 	// Инициализация сервисов
-	userService := services.NewUserService(userRepo)
+	smtpService := services.NewSMTPService()
+	userService := services.NewUserService(userRepo, smtpService)
 	accountService := services.NewAccountService(accountRepo)
 	cardService := services.NewCardService(cardRepo)
 	transferService := services.NewTransferService(transferRepo, accountRepo)
