@@ -11,7 +11,7 @@ import (
 type User struct {
 	ID        uint      `json:"id"`
 	Email     string    `json:"email"`
-	Password  string    `json:"-"`
+	Password  string    `json:"password"`
 	Username  string    `json:"username"`
 	CreatedAt time.Time `json:"created_at"`
 }

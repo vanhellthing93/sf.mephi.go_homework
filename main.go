@@ -2,9 +2,11 @@ package main
 
 import (
 	"log"
-	"time"
+	"net/http"
+
+	"github.com/gorilla/mux"
 	"github.com/vanhellthing93/sf.mephi.go_homework/config"
-	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/handlers"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/repositories"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/services"
 )
@@ -20,19 +22,14 @@ func main() {
 
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
+	userHandler := handlers.NewUserHandler(userService)
 
-	bob := &models.User{
-		ID:        2,
-		Email:     "bob2@example.com",
-		Password:  "securepassword",
-		Username:  "bob2",
-		CreatedAt: time.Now(),
-	}
+	r := mux.NewRouter()
 
-	err := userService.RegisterUser(bob)
-	if err != nil {
-		log.Fatalf("Ошибка: %v", err)
-	}
+	// Публичные маршруты
+	r.HandleFunc("/register", userHandler.Register).Methods("POST")
+	r.HandleFunc("/login", userHandler.Login).Methods("POST")
 
-
+	log.Println("Server is running on :8080")
+	http.ListenAndServe(":8080", r)
 }
