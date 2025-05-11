@@ -27,6 +27,7 @@ func main() {
 	transferRepo := repositories.NewTransferRepository(db)
 	creditRepo := repositories.NewCreditRepository(db)
 	paymentRepo := repositories.NewPaymentRepository(db)
+	analyticsRepo := repositories.NewAnalyticsRepository(db)
 
 
 
@@ -37,6 +38,7 @@ func main() {
 	transferService := services.NewTransferService(transferRepo, accountRepo)
 	creditService := services.NewCreditService(creditRepo)
 	paymentService := services.NewPaymentService(paymentRepo, creditRepo, accountRepo)
+	analyticsService := services.NewAnalyticsService(analyticsRepo)
 
 
 
@@ -48,6 +50,7 @@ func main() {
 	transferHandler := handlers.NewTransferHandler(transferService)
 	creditHandler := handlers.NewCreditHandler(creditService)
 	paymentHandler := handlers.NewPaymentHandler(paymentService)
+	analyticsHandler := handlers.NewAnalyticsHandler(analyticsService)
 
 
 
@@ -86,6 +89,11 @@ func main() {
 	authRouter.HandleFunc("/credits/{credit_id}/payments", paymentHandler.GetCreditPayments).Methods("GET")
 	authRouter.HandleFunc("/payments/{payment_id}", paymentHandler.GetPayment).Methods("GET")
 
+	// Аналитика
+	authRouter.HandleFunc("/analytics/income-expense", analyticsHandler.GetIncomeExpenseStats).Methods("GET")
+	authRouter.HandleFunc("/analytics/balance-forecast", analyticsHandler.GetBalanceForecast).Methods("GET")
+	authRouter.HandleFunc("/analytics/credit-load", analyticsHandler.GetCreditLoad).Methods("GET")
+	authRouter.HandleFunc("/analytics/monthly-stats", analyticsHandler.GetMonthlyStats).Methods("GET")
 
 	log.Println("Server is running on :8080")
 	http.ListenAndServe(":8080", r)
