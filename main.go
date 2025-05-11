@@ -25,6 +25,8 @@ func main() {
 	accountRepo := repositories.NewAccountRepository(db)
 	cardRepo := repositories.NewCardRepository(db)
 	transferRepo := repositories.NewTransferRepository(db)
+	creditRepo := repositories.NewCreditRepository(db)
+
 
 
 	// Инициализация сервисов
@@ -32,6 +34,9 @@ func main() {
 	accountService := services.NewAccountService(accountRepo)
 	cardService := services.NewCardService(cardRepo)
 	transferService := services.NewTransferService(transferRepo, accountRepo)
+	creditService := services.NewCreditService(creditRepo)
+	
+
 
 
 	// Инициализация обработчиков
@@ -39,6 +44,8 @@ func main() {
 	accountHandler := handlers.NewAccountHandler(accountService)
 	cardHandler := handlers.NewCardHandler(cardService)
 	transferHandler := handlers.NewTransferHandler(transferService)
+	creditHandler := handlers.NewCreditHandler(creditService)
+
 
 
 	r := mux.NewRouter()
@@ -65,6 +72,11 @@ func main() {
 	authRouter.HandleFunc("/accounts/{from_account_id}/transfers", transferHandler.CreateTransfer).Methods("POST")
 	authRouter.HandleFunc("/accounts/{account_id}/transfers", transferHandler.GetAccountTransfers).Methods("GET")
 	authRouter.HandleFunc("/transfers/{transfer_id}", transferHandler.GetTransfer).Methods("GET")
+
+	// Управление кредитами
+	authRouter.HandleFunc("/credits", creditHandler.CreateCredit).Methods("POST")
+	authRouter.HandleFunc("/credits", creditHandler.GetUserCredits).Methods("GET")
+	authRouter.HandleFunc("/credits/{credit_id}/schedule", creditHandler.GetPaymentSchedule).Methods("GET")
 	
 
 	log.Println("Server is running on :8080")
