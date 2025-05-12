@@ -3,13 +3,14 @@ package services
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/repositories"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 type CreditService struct {
@@ -63,7 +64,9 @@ func (s *CreditService) CreateCredit(userID uint, amount float64, term int) (*mo
 
 	// Отправляем уведомление
 	if err := s.smtpService.SendCreditNotification(user.Email, amount, rate, term); err != nil {
-		log.Printf("Failed to send credit notification: %v", err)
+		utils.Log.WithFields(logrus.Fields{
+			"error": err.Error(),
+		}).Warn("Failed to send credit notification")
 	}
 
 	return credit, nil

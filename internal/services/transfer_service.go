@@ -2,11 +2,11 @@ package services
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/repositories"
+    "github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 type TransferService struct {
@@ -72,7 +72,7 @@ func (s *TransferService) GetTransferByID(transferID uint) (*models.Transfer, er
 func (s *TransferService) AccountBelongsToUser(accountID, userID uint) bool {
     account, err := s.accountRepo.GetAccountByID(accountID)
     if err != nil {
-        log.Printf("Error getting account: %v", err)
+        utils.Log.WithError(err).Warn("Error getting account")
         return false
     }
 

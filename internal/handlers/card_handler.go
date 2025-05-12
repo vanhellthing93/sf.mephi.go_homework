@@ -2,12 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/services"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 type CardHandler struct {
@@ -63,7 +64,9 @@ func (h *CardHandler) GetAccountCards(w http.ResponseWriter, r *http.Request) {
 
     cards, err := h.service.GetCardsByAccountID(uint(accountID))
     if err != nil {
-        log.Printf("Error getting cards: %v", err)
+		utils.Log.WithFields(logrus.Fields{
+			"error": err.Error(),
+		}).Warn("Error getting cards")        
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }

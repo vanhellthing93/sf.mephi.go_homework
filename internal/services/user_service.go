@@ -3,12 +3,13 @@ package services
 import (
 	"errors"
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/repositories"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 type UserService struct {
@@ -46,11 +47,18 @@ func (s *UserService) RegisterUser(user *models.User) error {
 		if strings.Contains(err.Error(), "UNIQUE") {
 			return fmt.Errorf("user with this email or username already exists")
 		}
+		utils.Log.WithFields(logrus.Fields{
+			"error": err.Error(),
+			"email": user.Email,
+		}).Error("Failed to create user")
 		return fmt.Errorf("failed to create user: %w", err)
 	}
 
 	if err := s.smtpService.SendRegistrationNotification(user.Email); err != nil {
-		log.Printf("Failed to send registration notification to %s: %v", user.Email, err)
+		utils.Log.WithFields(logrus.Fields{
+			"error": err.Error(),
+			"email": user.Email,
+		}).Error("Failed to send registration notification")
 	}
 
 	return nil

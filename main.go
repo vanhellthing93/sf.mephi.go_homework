@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -10,14 +9,17 @@ import (
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/middleware"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/repositories"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/services"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 func main() {
+	utils.InitLogger()
+
 	db := config.ConnectDB()
 	defer db.Close()
 
 	if err := config.InitDB(db); err != nil {
-		log.Fatalf("Failed to initialize database: %v", err)
+		utils.Log.WithError(err).Fatal("Failed to initialize database")
 	}
 
 	// Инициализация репозиториев
@@ -113,7 +115,7 @@ func main() {
 	authRouter.HandleFunc("/transactions/{transaction_id}", transactionHandler.DeleteTransaction).Methods("DELETE")
 
 
-	log.Println("Server is running on :8080")
+	utils.Log.Info("Server is running on :8080")
 	http.ListenAndServe(":8080", r)
 
 }

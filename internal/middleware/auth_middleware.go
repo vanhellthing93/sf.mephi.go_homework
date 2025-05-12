@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -10,11 +9,15 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	if err := godotenv.Load(); err != nil {
-		log.Printf("Warning loading .env: %v", err)
+		utils.Log.WithFields(logrus.Fields{
+			"error": err.Error(),
+		}).Warn("Warning loading .env:")
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         jwtSecret := os.Getenv("JWT_SECRET")

@@ -2,11 +2,12 @@ package services
 
 import (
 	"fmt"
-	"log"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/repositories"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 type PaymentService struct {
@@ -136,32 +137,47 @@ func (s *PaymentService) ProcessOverduePayments() error {
 	for _, payment := range payments {
 		// Начисляем штраф
 		if err := s.applyPenalty(payment); err != nil {
-			log.Printf("Failed to apply penalty for payment %d: %v", payment.ID, err)
+			utils.Log.WithFields(logrus.Fields{
+				"error": err.Error(),
+				"payment.ID": payment.ID,
+			}).Error("Failed to apply penalty for payment")
 			continue
 		}
 
 		// Обновляем статус платежа
 		if err := s.repo.UpdatePaymentStatus(payment.ID, "failed"); err != nil {
-			log.Printf("Failed to update payment status for payment %d: %v", payment.ID, err)
+			utils.Log.WithFields(logrus.Fields{
+				"error": err.Error(),
+				"payment.ID": payment.ID,
+			}).Error("Failed to update payment status for payment")
 			continue
 		}
 
 		// Получаем пользователя
 		credit, err := s.creditRepo.GetCreditByID(payment.CreditID)
 		if err != nil {
-			log.Printf("Failed to get credit for payment %d: %v", payment.ID, err)
+			utils.Log.WithFields(logrus.Fields{
+				"error": err.Error(),
+				"payment.ID": payment.ID,
+			}).Error("Failed to get credit for payment")
 			continue
 		}
 
 		user, err := s.userRepo.GetUserByID(credit.UserID)
 		if err != nil {
-			log.Printf("Failed to get user for payment %d: %v", payment.ID, err)
+			utils.Log.WithFields(logrus.Fields{
+				"error": err.Error(),
+				"payment.ID": payment.ID,
+			}).Error("Failed to get user for payment")
 			continue
 		}
 
 		// Отправляем уведомление о просроченном платеже
 		if err := s.smtpService.SendOverduePaymentNotification(user.Email, payment.Amount); err != nil {
-			log.Printf("Failed to send overdue payment notification for payment %d: %v", payment.ID, err)
+			utils.Log.WithFields(logrus.Fields{
+				"error": err.Error(),
+				"payment.ID": payment.ID,
+			}).Error("Failed to send overdue payment notification for payment")
 		}
 	}
 

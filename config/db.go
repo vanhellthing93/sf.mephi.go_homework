@@ -3,9 +3,9 @@ package config
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -14,7 +14,7 @@ func ConnectDB() *sql.DB {
 	// Загружаем переменные окружения из .env файла
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		utils.Log.Fatal("Error loading .env file")
 	}
 
 	// Получаем параметры подключения из переменных окружения
@@ -37,16 +37,16 @@ func ConnectDB() *sql.DB {
 	// Открываем соединение с БД
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
-		log.Fatal(err)
+		utils.Log.Fatal(err)
 	}
 
 	// Проверяем соединение
 	err = db.Ping()
 	if err != nil {
-		log.Fatal(err)
+		utils.Log.Fatal(err)
 	}
 
-	log.Println("Successfully connected to database!")
+	utils.Log.Info("Successfully connected to database!")
 	return db
 }
 

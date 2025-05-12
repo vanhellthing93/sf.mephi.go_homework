@@ -3,11 +3,12 @@ package services
 import (
 	"crypto/tls"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/go-mail/mail/v2"
+	"github.com/sirupsen/logrus"
 	"github.com/vanhellthing93/sf.mephi.go_homework/config"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 type SMTPService struct {
@@ -42,11 +43,13 @@ func (s *SMTPService) SendEmail(to, subject, body string) error {
 
 	// Отправляем сообщение
 	if err := s.dialer.DialAndSend(m); err != nil {
-		log.Printf("SMTP error: %v", err)
+		utils.Log.WithError(err).Warn("SMTP error.")
 		return fmt.Errorf("email sending failed")
 	}
 
-	log.Printf("Email sent to %s", to)
+	utils.Log.WithFields(logrus.Fields{
+		"email": to,
+	}).Info("Email sent")
 	return nil
 }
 

@@ -19,5 +19,6 @@ require (
 
 require (
 	github.com/ProtonMail/go-crypto v1.2.0
+	github.com/sirupsen/logrus v1.9.3
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 )

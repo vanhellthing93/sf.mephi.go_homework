@@ -2,12 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/services"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 type TransferHandler struct {
@@ -29,8 +30,11 @@ func (h *TransferHandler) CreateTransfer(w http.ResponseWriter, r *http.Request)
     // Получаем userID из контекста
     userID := r.Context().Value("userID").(uint)
 
-    log.Printf("Creating transfer from account %d by user %d", fromAccountID, userID)
-
+    utils.Log.WithFields(logrus.Fields{
+        "fromAccountID": fromAccountID,
+        "userID": userID,
+    }).Infof("Creating transfer from account %v by user %v", fromAccountID, userID)    
+    
     var request struct {
         ToAccount   uint    `json:"to_account"`
         Amount      float64 `json:"amount"`
@@ -41,12 +45,21 @@ func (h *TransferHandler) CreateTransfer(w http.ResponseWriter, r *http.Request)
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
+ 
+    utils.Log.WithFields(logrus.Fields{
+        "ToAccount": request.ToAccount,
+        "Amount": request.Amount,
+        "Description": request.Description,
+    }).Infof("Transfer request: to_account=%d, amount=%.2f, description=%s",
+    request.ToAccount, request.Amount, request.Description)  
 
-    log.Printf("Transfer request: to_account=%d, amount=%.2f, description=%s", request.ToAccount, request.Amount, request.Description)
 
     // Проверяем, что счет отправителя принадлежит пользователю
     if !h.service.AccountBelongsToUser(uint(fromAccountID), userID) {
-        log.Printf("Account %d does not belong to user %d", fromAccountID, userID)
+        utils.Log.WithFields(logrus.Fields{
+            "fromAccountID": fromAccountID,
+            "userID": userID,
+        }).Warnf("Account %d does not belong to user %d", fromAccountID, userID)    
         http.Error(w, "From account does not belong to user", http.StatusForbidden)
         return
     }

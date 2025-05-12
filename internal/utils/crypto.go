@@ -7,7 +7,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"strings"
 
@@ -15,6 +14,8 @@ import (
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
 	"github.com/ProtonMail/go-crypto/openpgp/packet"
 	"github.com/joho/godotenv"
+
+
 )
 
 // Переменные для ключей и секретов
@@ -25,13 +26,13 @@ var (
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		log.Printf("Warning loading .env: %v", err)
+		Log.WithError(err).Warn("Warning loading .env")
 	}
 
 	// Загружаем HMAC_SECRET из окружения
 	hmacSecretStr := os.Getenv("HMAC_SECRET")
 	if hmacSecretStr == "" {
-		panic("HMAC_SECRET is not set in environment")
+		Log.Panic("HMAC_SECRET is not set in environment")
 	}
 	// if len(hmacSecretStr) < 32 {
 	// 	log.Printf("Warning: HMAC_SECRET is shorter than recommended 32 bytes")
@@ -42,19 +43,19 @@ func init() {
 	privateKeyFile := os.Getenv("PGP_PRIVATE_KEY")
 	privateKeyBytes, err := os.ReadFile(privateKeyFile)
 	if err != nil {
-		panic("failed to read PGP private key file")
+		Log.Panic("failed to read PGP private key file")
 	}
 	privateKeyArmored := string(privateKeyBytes)
 	if privateKeyArmored == "" {
-		panic("PGP_PRIVATE_KEY is not set in environment")
+		Log.Panic("PGP_PRIVATE_KEY is not set in environment")
 	}
 
 	entityList, err := readPGPEntityFromString(privateKeyArmored)
 	if err != nil {
-		panic("failed to parse PGP private key")
+		Log.Panic("failed to parse PGP private key")
 	}
 	if len(entityList) == 0 {
-		panic("no PGP entities found in key")
+		Log.Panic("no PGP entities found in key")
 	}
 	pgpEntity = entityList[0]
 	

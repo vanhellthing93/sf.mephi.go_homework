@@ -1,11 +1,12 @@
 package config
 
 import (
-	"log"
 	"os"
 	"strconv"
 
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 type SMTPConfig struct {
@@ -20,7 +21,7 @@ func LoadSMTPConfig() *SMTPConfig {
 	// Загружаем переменные окружения из файла .env
 	err := godotenv.Load()
 	if err != nil {
-		log.Println("Warning: No .env file found")
+		utils.Log.Warn("Warning: No .env file found")
 	}
 
 	return &SMTPConfig{
@@ -43,7 +44,9 @@ func getPortEnv(key string, defaultValue int) int {
 	if value, exists := os.LookupEnv(key); exists {
 		port, err := strconv.Atoi(value)
 		if err != nil {
-			log.Printf("Error loading smtp port. Using default values. %e", err)
+			utils.Log.WithFields(logrus.Fields{
+				"error": err.Error(),
+			}).Error("Error loading smtp port. Using default values.")
 			return defaultValue
 		} else {
 			return port

@@ -1,8 +1,8 @@
 package services
 
 import (
-	"log"
-	"time"
+		"time"
+		"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 )
 
 type SchedulerService struct {
@@ -27,12 +27,12 @@ func (s *SchedulerService) Start() {
 }
 
 func (s *SchedulerService) ProcessOverduePayments() {
-	log.Println("Processing overdue payments...")
+	utils.Log.Info("Processing overdue payments...")
 
 	// Обрабатываем просроченные платежи
 	if err := s.paymentService.ProcessOverduePayments(); err != nil {
-		log.Printf("Error processing overdue payments: %v", err)
+		utils.Log.WithError(err).Warn("Error processing overdue payments")
 	}
 
-	log.Println("Finished processing overdue payments")
+	utils.Log.Info("Finished processing overdue payments")
 }
