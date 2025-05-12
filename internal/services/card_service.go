@@ -1,23 +1,16 @@
 package services
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"math/rand"
-	// "os"
 	"strconv"
 	"time"
 
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/repositories"
+	"github.com/vanhellthing93/sf.mephi.go_homework/internal/utils"
 	"golang.org/x/crypto/bcrypt"
 )
-
-// var hmacSecret = []byte(os.Getenv("HMAC_SECRET"))
-
-var hmacSecret = []byte("HMAC_SECRET")
 
 type CardService struct {
 	repo *repositories.CardRepository
@@ -118,17 +111,35 @@ func (s *CardService) EncryptCardData(card *models.Card) error {
     }
     card.CVV = string(hashedCVV)
 
+	// Шифруем номер карты
+    encryptedNumber, err := utils.EncryptPGP(card.Number)
+    if err != nil {
+        return fmt.Errorf("failed to encrypt card number: %v", err)
+    }
+    card.Number = encryptedNumber
+
     // Генерация HMAC для проверки целостности
-    card.HMAC = computeHMAC(card.Number, hmacSecret)
+    card.HMAC = utils.ComputeHMAC(card.Number)
 
     return nil
 }
 
 func (s *CardService) DecryptCardData(card *models.Card) error {
-    // Проверка HMAC
-    if !verifyHMAC([]byte(card.Number), []byte(card.HMAC), hmacSecret) {
-        return fmt.Errorf("HMAC verification failed")
+	// Проверка HMAC
+	if !utils.VerifyHMAC([]byte(card.Number), []byte(card.HMAC)) {
+		return fmt.Errorf("HMAC verification failed")
+	}
+	
+	// Дешифруем номер карты
+    decrypted, err := utils.DecryptPGP(card.Number)
+    if err != nil {
+        return fmt.Errorf("failed to decrypt card number: %v", err)
     }
+
+
+
+    // Возвращаем оригинальный номер
+    card.Number = decrypted
 
     return nil
 }
@@ -183,15 +194,4 @@ func generateExpiryDate() string {
 	// Добавляем 3 года к текущей дате
 	expiryDate := time.Now().AddDate(3, 0, 0)
 	return expiryDate.Format("01/06")
-}
-
-func computeHMAC(data string, secret []byte) string {
-    h := hmac.New(sha256.New, secret)
-    h.Write([]byte(data))
-    return hex.EncodeToString(h.Sum(nil))
-}
-
-func verifyHMAC(data, mac, secret []byte) bool {
-    expectedMAC := computeHMAC(string(data), secret)
-    return hmac.Equal([]byte(expectedMAC), mac)
 }

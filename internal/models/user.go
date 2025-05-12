@@ -16,6 +16,16 @@ type User struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
+// Валидация username
+func (u *User) ValidateUsername() error {
+    if len(u.Username) < 3 {
+        return errors.New("username too short")
+    }
+    return nil
+}
+
+
+
 // Валидация email
 func (u *User) ValidateEmail() error {
 	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)

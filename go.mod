@@ -12,4 +12,12 @@ require (
 	golang.org/x/crypto v0.37.0
 )
 
-require gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+require (
+	github.com/cloudflare/circl v1.6.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+)
+
+require (
+	github.com/ProtonMail/go-crypto v1.2.0
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+)

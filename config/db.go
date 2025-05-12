@@ -50,7 +50,7 @@ func InitDB(db *sql.DB) error {
 	CREATE TABLE IF NOT EXISTS cards (
 		id SERIAL PRIMARY KEY,
 		account_id INTEGER REFERENCES accounts(id) ON DELETE CASCADE,
-		number VARCHAR(16) NOT NULL,
+		number TEXT NOT NULL,
 		cvv VARCHAR(60) NOT NULL,
 		expiry VARCHAR(5) NOT NULL,
 		hmac VARCHAR(64) NOT NULL,

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/vanhellthing93/sf.mephi.go_homework/internal/models"
@@ -24,23 +25,32 @@ func NewUserService(repo *repositories.UserRepository, smtpService *SMTPService)
 
 // Регистрация пользователя
 func (s *UserService) RegisterUser(user *models.User) error {
+	// Валидация полей
+	if err := user.ValidateUsername(); err != nil {
+		return err
+	}
 	if err := user.ValidateEmail(); err != nil {
 		return err
 	}
 	if err := user.ValidatePassword(); err != nil {
 		return err
 	}
+		// Хеширование пароля
 	if err := user.HashPassword(); err != nil {
 		return err
 	}
 	user.CreatedAt = time.Now()
 
+	// Создание пользователя
 	if err := s.repo.CreateUser(user); err != nil {
-		return fmt.Errorf("failed to create user: %v", err)
+		if strings.Contains(err.Error(), "UNIQUE") {
+			return fmt.Errorf("user with this email or username already exists")
+		}
+		return fmt.Errorf("failed to create user: %w", err)
 	}
 
 	if err := s.smtpService.SendRegistrationNotification(user.Email); err != nil {
-		log.Printf("Failed to send registration notification: %v", err)
+		log.Printf("Failed to send registration notification to %s: %v", user.Email, err)
 	}
 
 	return nil

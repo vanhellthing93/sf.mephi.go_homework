@@ -43,8 +43,19 @@ func (r *CreditRepository) CreateCredit(credit *models.Credit) error {
 		}
 	}
 
+	// Создание платежей со статусом "pending"
+	for _, payment := range schedule {
+		query = `INSERT INTO payments (credit_id, amount, payment_date, status, created_at)
+		          VALUES ($1, $2, $3, $4, $5)`
+		_, err = tx.Exec(query, credit.ID, payment.Amount, payment.DueDate, "pending", time.Now())
+		if err != nil {
+			return fmt.Errorf("failed to create pending payment: %v", err)
+		}
+	}
+
 	return tx.Commit()
 }
+
 
 func (r *CreditRepository) GetCreditsByUserID(userID uint) ([]models.Credit, error) {
 	var credits []models.Credit

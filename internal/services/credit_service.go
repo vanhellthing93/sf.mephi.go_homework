@@ -89,3 +89,27 @@ func (s *CreditService) CreditBelongsToUser(creditID, userID uint) bool {
 
 	return credit.UserID == userID
 }
+
+func (s *CreditService) GetCreditBalance(creditID uint) (float64, error) {
+	credit, err := s.repo.GetCreditByID(creditID)
+	if err != nil {
+		return 0, fmt.Errorf("failed to get credit: %v", err)
+	}
+
+	return credit.Amount, nil
+}
+
+func (s *CreditService) GetNextPaymentDate(creditID uint) (time.Time, error) {
+	schedule, err := s.repo.GetPaymentSchedule(creditID)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("failed to get payment schedule: %v", err)
+	}
+
+	for _, payment := range schedule {
+		if !payment.IsPaid {
+			return payment.DueDate, nil
+		}
+	}
+
+	return time.Time{}, fmt.Errorf("no pending payments found")
+}

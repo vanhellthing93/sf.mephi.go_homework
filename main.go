@@ -99,15 +99,6 @@ func main() {
 	authRouter.HandleFunc("/analytics/credit-load", analyticsHandler.GetCreditLoad).Methods("GET")
 	authRouter.HandleFunc("/analytics/monthly-stats", analyticsHandler.GetMonthlyStats).Methods("GET")
 
-	cbrRate, err := cbrService.GetCentralBankRate()
-	if err != nil {
-		log.Println(err)
-	} else {
-		log.Println("Hello ")
-		log.Println(cbrRate)
-	}
-
-
 	log.Println("Server is running on :8080")
 	http.ListenAndServe(":8080", r)
 
