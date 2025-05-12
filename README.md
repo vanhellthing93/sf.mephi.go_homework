@@ -136,11 +136,11 @@ go_homework/
 │   ├── repos/     # Репозитории (работа с БД)
 │   ├── services/  # Бизнес-логика
 │   └── utils/     # Вспомогательные утилиты
-├── migrations/    # SQL-миграции
-├── migrations/    # SQL-миграции
-├── migrations/    # SQL-миграции
 ├── .env.example   # Шаблон конфига
-└── README.md                 # Описание проекта
+├── .gitignore     # Игнорируемые файлы
+├── go.mod         # Модуль Go
+├── go.sum         # Контрольные суммы зависимосте
+└── README.md      # Описание проекта
 ```
 
 ---
@@ -151,6 +151,37 @@ go_homework/
 Authorization: Bearer <ваш_jwt_токен>
 ```
 ---
+
+## 📖 Структура API
+
+| Метод  | Путь                                  | Описание                         | Доступ    |
+|--------|---------------------------------------|----------------------------------|-----------|
+| POST   | /register                             | Регистрация пользователя         | Публичный |
+| POST   | /login                                | Аутентификация (получение JWT)   | Публичный |
+| POST   | /accounts                             | Создание банковского счета       | JWT       |
+| GET    | /accounts                             | Получение списка счетов          | JWT       |
+| POST   | /accounts/{account_id}/cards          | Создание карты для счета         | JWT       |
+| GET    | /accounts/{account_id}/cards          | Получение карт счета             | JWT       |
+| GET    | /cards/{card_id}                      | Получение информации о карте     | JWT       |
+| DELETE | /cards/{card_id}                      | Удаление карты                   | JWT       |
+| POST   | /accounts/{from_account_id}/transfers | Создание перевода между счетами  | JWT       |
+| GET    | /accounts/{account_id}/transfers      | Получение переводов счета        | JWT       |
+| GET    | /transfers/{transfer_id}              | Получение информации о переводе  | JWT       |
+| POST   | /credits                              | Создание кредита                 | JWT       |
+| GET    | /credits                              | Получение списка кредитов        | JWT       |
+| GET    | /credits/{credit_id}/schedule         | Получение графика платежей       | JWT       |
+| POST   | /credits/{credit_id}/payments         | Создание платежа по кредиту      | JWT       |
+| GET    | /credits/{credit_id}/payments         | Получение платежей по кредиту    | JWT       |
+| GET    | /payments/{payment_id}                | Получение информации о платеже   | JWT       |
+| POST   | /accounts/{account_id}/transactions   | Создание операции по счету       | JWT       |
+| GET    | /accounts/{account_id}/transactions   | Получение операций счета         | JWT       |
+| GET    | /transactions/{transaction_id}        | Получение информации об операции | JWT       |
+| PATCH  | /transactions/{transaction_id}        | Обновление операции              | JWT       |
+| DELETE | /transactions/{transaction_id}        | Удаление операции                | JWT       |
+| GET    | /analytics/income-expense             | Статистика доходов/расходов      | JWT       |
+| GET    | /analytics/balance-forecast           | Прогноз баланса                  | JWT       |
+| GET    | /analytics/credit-load                | Кредитная нагрузка               | JWT       |
+| GET    | /analytics/monthly-stats              | Ежемесячная статистика           | JWT       |
 
 ## 📖 Примеры API-запросов
 
@@ -175,15 +206,157 @@ curl -X POST http://localhost:8080/login \
 ```bash
 curl -X POST http://localhost:8080/accounts \
   -H "Authorization: Bearer <токен>" \
+  -H "Content-Type: application/json" \
   -d '{"currency":"RUB"}'
+```
+
+### Получение списка счетов (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/accounts \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Создание операции по счету (требует авторизации)
+```bash
+curl -X POST http://localhost:8080/accounts/<account_id>/transactions \
+  -H "Authorization: Bearer <токен>" \
+  -H "Content-Type: application/json" \
+  -d '{"amount":100.50, "type":"income", "category":"Salary", "description":"Monthly salary"}'
+```
+
+### Получение списка операций счета (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/accounts/<account_id>/transactions \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Получение информации об операции (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/transactions/<transaction_id> \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Обновление операции (требует авторизации)
+```bash
+curl -X PATCH http://localhost:8080/transactions/<transaction_id> \
+  -H "Authorization: Bearer <токен>" \
+  -H "Content-Type: application/json" \
+  -d '{"amount":150.75, "type":"income", "category":"Bonus", "description":"Yearly bonus"}'
+```
+
+### Удаление операции (требует авторизации)
+```bash
+curl -X DELETE http://localhost:8080/transactions/<transaction_id> \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Создание карты для счета (требует авторизации)
+```bash
+curl -X POST http://localhost:8080/accounts/<account_id>/cards \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Получение списка карт счета (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/accounts/<account_id>/cards \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Получение информации о карте (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/cards/<card_id> \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Удаление карты (требует авторизации)
+```bash
+curl -X DELETE http://localhost:8080/cards/<card_id> \
+  -H "Authorization: Bearer <токен>"
 ```
 
 ### Перевод средств  (требует авторизации)
 
 ```bash
-curl -X POST http://localhost:8080/transfers \
+curl -X POST http://localhost:8080/accounts/<from_account_id>/transfers \
   -H "Authorization: Bearer <токен>" \
-  -d '{"from_account_id":1, "to_account_id":2, "amount":100.50}'
+  -H "Content-Type: application/json" \
+  -d '{"to_account":<account_id>, "amount":100.50, "description":"Payment for services"}'
+```
+
+### Получение списка переводов счета (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/accounts/<account_id>/transfers \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Получение информации о переводе (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/transfers/<transfer_id> \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Создание кредита (требует авторизации)
+```bash
+curl -X POST http://localhost:8080/credits \
+  -H "Authorization: Bearer <токен>" \
+  -H "Content-Type: application/json" \
+  -d '{"amount":10000, "term":12}'
+```
+
+### Получение списка кредитов (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/credits \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Получение графика платежей по кредиту (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/credits/<credit_id>/schedule \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Создание платежа по кредиту (требует авторизации)
+```bash
+curl -X POST http://localhost:8080/credits/<credit_id>/payments \
+  -H "Authorization: Bearer <токен>" \
+  -H "Content-Type: application/json" \
+  -d '{"amount":1000}'
+```
+
+### Получение списка платежей по кредиту (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/credits/<credit_id>/payments \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Получение информации о платеже (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/payments/<payment_id> \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Получение статистики доходов и расходов (требует авторизации)
+```bash
+curl -X GET "http://localhost:8080/analytics/income-expense?start_date=2025-01-01&end_date=2025-01-31" \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Получение прогноза баланса (требует авторизации)
+```bash
+curl -X GET "http://localhost:8080/analytics/balance-forecast?days=30" \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Получение кредитной нагрузки (требует авторизации)
+```bash
+curl -X GET http://localhost:8080/analytics/credit-load \
+  -H "Authorization: Bearer <токен>"
+```
+
+### Получение ежемесячной статистики (требует авторизации)
+```bash
+curl -X GET "http://localhost:8080/analytics/monthly-stats?year=2025" \
+  -H "Authorization: Bearer <токен>"
 ```
 
 ---

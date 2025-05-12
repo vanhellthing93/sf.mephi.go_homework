@@ -28,6 +28,8 @@ func main() {
 	creditRepo := repositories.NewCreditRepository(db)
 	paymentRepo := repositories.NewPaymentRepository(db)
 	analyticsRepo := repositories.NewAnalyticsRepository(db)
+	transactionRepo := repositories.NewTransactionRepository(db)
+
 
 
 
@@ -41,6 +43,8 @@ func main() {
 	creditService := services.NewCreditService(creditRepo, userRepo, cbrService, smtpService)
 	paymentService := services.NewPaymentService(paymentRepo, creditRepo, accountRepo, userRepo, smtpService)
 	analyticsService := services.NewAnalyticsService(analyticsRepo)
+	transactionService := services.NewTransactionService(transactionRepo, accountRepo)
+
 
 
 	// Инициализация шедулера
@@ -55,6 +59,8 @@ func main() {
 	creditHandler := handlers.NewCreditHandler(creditService)
 	paymentHandler := handlers.NewPaymentHandler(paymentService)
 	analyticsHandler := handlers.NewAnalyticsHandler(analyticsService)
+	transactionHandler := handlers.NewTransactionHandler(transactionService)
+
 
 
 
@@ -98,6 +104,14 @@ func main() {
 	authRouter.HandleFunc("/analytics/balance-forecast", analyticsHandler.GetBalanceForecast).Methods("GET")
 	authRouter.HandleFunc("/analytics/credit-load", analyticsHandler.GetCreditLoad).Methods("GET")
 	authRouter.HandleFunc("/analytics/monthly-stats", analyticsHandler.GetMonthlyStats).Methods("GET")
+
+	// Управление операциями
+	authRouter.HandleFunc("/accounts/{account_id}/transactions", transactionHandler.CreateTransaction).Methods("POST")
+	authRouter.HandleFunc("/accounts/{account_id}/transactions", transactionHandler.GetAccountTransactions).Methods("GET")
+	authRouter.HandleFunc("/transactions/{transaction_id}", transactionHandler.GetTransaction).Methods("GET")
+	authRouter.HandleFunc("/transactions/{transaction_id}", transactionHandler.UpdateTransaction).Methods("PATCH")
+	authRouter.HandleFunc("/transactions/{transaction_id}", transactionHandler.DeleteTransaction).Methods("DELETE")
+
 
 	log.Println("Server is running on :8080")
 	http.ListenAndServe(":8080", r)

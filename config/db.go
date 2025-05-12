@@ -155,5 +155,21 @@ func InitDB(db *sql.DB) error {
 		return err
 	}
 
+	// Создание таблицы операций
+	createTransactionsTableQuery := `
+	CREATE TABLE IF NOT EXISTS transactions (
+		id SERIAL PRIMARY KEY,
+		account_id INTEGER REFERENCES accounts(id) ON DELETE CASCADE,
+		amount DECIMAL(15, 2) NOT NULL,
+		type VARCHAR(10) NOT NULL,
+		category VARCHAR(50),
+		description TEXT,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	);
+	`
+	if _, err := db.Exec(createTransactionsTableQuery); err != nil {
+		return err
+	}
+
 	return nil
 }

@@ -52,3 +52,9 @@ func (r *AccountRepository) GetAccountByID(accountID uint) (*models.Account, err
     }
     return &account, nil
 }
+
+func (r *AccountRepository) UpdateAccount(account *models.Account) error {
+	query := `UPDATE accounts SET balance=$1, currency=$2 WHERE id=$3`
+	_, err := r.DB.Exec(query, account.Balance, account.Currency, account.ID)
+	return err
+}
