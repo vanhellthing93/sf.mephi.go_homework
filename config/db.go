@@ -2,17 +2,51 @@ package config
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 func ConnectDB() *sql.DB {
-	connStr := "postgresql://go_hw_admin:gogogogo@192.168.4.173:5433/go_hw?sslmode=disable"
+	// Загружаем переменные окружения из .env файла
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	// Получаем параметры подключения из переменных окружения
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+	sslMode := os.Getenv("SSL_MODE")
+
+	// Формируем строку подключения
+	connStr := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=%s",
+		dbUser,
+		dbPassword,
+		dbHost,
+		dbPort,
+		dbName,
+		sslMode)
+
+	// Открываем соединение с БД
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Проверяем соединение
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Successfully connected to database!")
 	return db
 }
 

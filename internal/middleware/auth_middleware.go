@@ -2,15 +2,25 @@ package middleware
 
 import (
 	"context"
+	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {
+	if err := godotenv.Load(); err != nil {
+		log.Printf("Warning loading .env: %v", err)
+	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        jwtSecret := os.Getenv("JWT_SECRET")
+        if jwtSecret == "" {
+            panic("JWT_SECRET not set in environment")
+        }
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
 			http.Error(w, "Authorization header required", http.StatusUnauthorized)
@@ -20,7 +30,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		claims := &jwt.RegisteredClaims{}
 		token, err := jwt.ParseWithClaims(tokenString, claims,
 			func(token *jwt.Token) (interface{}, error) {
-				return []byte("your_jwt_secret"), nil
+				return []byte(jwtSecret), nil
 			})
 		if err != nil || !token.Valid {
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
