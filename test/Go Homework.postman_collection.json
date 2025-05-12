@@ -1,0 +1,1002 @@
+{
+	"info": {
+		"_postman_id": "28f4968d-fac7-40ee-a211-b21f1994758e",
+		"name": "Go Homework",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44848511",
+		"_collection_link": "https://ivan-8208029.postman.co/workspace/Ivan's-Workspace~1db7329d-616c-4d58-84c1-25a8ab03918c/collection/44848511-28f4968d-fac7-40ee-a211-b21f1994758e?action=share&source=collection_link&creator=44848511"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test2@example.com\",\r\n  \"password\": \"123123123\",\r\n  \"username\": \"test2user\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsImlhdCI6MTc0NjYxNTgxMSwiZXhwIjoxNzQ2NjE5NDExfQ.DZdvqJs-x8wnhhcdn8-Yfs_7oPybZNgLdfEXyrfTM0Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@example.com\",\r\n  \"password\": \"123123123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create bank account",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJcdTAwMDYiLCJleHAiOjE3NDcwNDYxNjcsImlhdCI6MTc0Njk1OTc2N30.TrY6KKKDzo9lA9Yqem-G8HQxJGQVYvQQxXLLROaqsFs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"currency\": \"RUB\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get bank account",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDQ3MDcwLCJpYXQiOjE3NDY5NjA2NzB9.f6Imzjgwir1xwr_Qb69-xDbVQtYyWy4hqbeGItkzIq4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get bank all cards of account",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDQ3MDcwLCJpYXQiOjE3NDY5NjA2NzB9.f6Imzjgwir1xwr_Qb69-xDbVQtYyWy4hqbeGItkzIq4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/3/cards",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"3",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create card",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDUwNjQzLCJpYXQiOjE3NDY5NjQyNDN9.C454EN7GJgFA05SY6C2OGB-F9-bM4bUafIxezMadjgo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/1/cards",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"1",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get card info by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDUwNjQzLCJpYXQiOjE3NDY5NjQyNDN9.C454EN7GJgFA05SY6C2OGB-F9-bM4bUafIxezMadjgo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cards/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cards",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete card by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDUwNjQzLCJpYXQiOjE3NDY5NjQyNDN9.C454EN7GJgFA05SY6C2OGB-F9-bM4bUafIxezMadjgo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cards/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cards",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create transfer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"to_account\": 3,\r\n  \"amount\": 100.50,\r\n  \"description\": \"Payment for services\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/2/transfers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"2",
+						"transfers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get transfers",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/2/transfers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"2",
+						"transfers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get transfer info",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/transfers/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transfers",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all user credits",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/credits",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"credits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create credit",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"amount\": 10000,\r\n  \"interest_rate\": 12.5,\r\n  \"term\": 12\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/credits",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"credits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get schedule by credit id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/credits/1/schedule",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"credits",
+						"1",
+						"schedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create credit payment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"amount\": 1000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/credits/1/payments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"credits",
+						"1",
+						"payments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all credit payments",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/credits/1/payments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"credits",
+						"1",
+						"payments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get payment info by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/payments/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"payments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get ie forecast",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/analytics/income-expense?start_date=2025-01-01&end_date=2025-01-31",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"analytics",
+						"income-expense"
+					],
+					"query": [
+						{
+							"key": "start_date",
+							"value": "2025-01-01"
+						},
+						{
+							"key": "end_date",
+							"value": "2025-01-31"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get balnce forecast",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/analytics/balance-forecast?days=30",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"analytics",
+						"balance-forecast"
+					],
+					"query": [
+						{
+							"key": "days",
+							"value": "30"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get credit-load",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/analytics/credit-load",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"analytics",
+						"credit-load"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get monthly stat",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDU3OTkwLCJpYXQiOjE3NDY5NzE1OTB9.TEApk_1F8J3_XmOJhc-zU61Wtay4B0RrORpfFbJ2JOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/analytics/monthly-stats?year=2025",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"analytics",
+						"monthly-stats"
+					],
+					"query": [
+						{
+							"key": "year",
+							"value": "2025"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create transaction",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDQ3MDcwLCJpYXQiOjE3NDY5NjA2NzB9.f6Imzjgwir1xwr_Qb69-xDbVQtYyWy4hqbeGItkzIq4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\":100.50, \r\n    \"type\":\"income\", \r\n    \"category\":\"Salary\", \r\n    \"description\":\"Monthly salary\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/4/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"4",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get transaction",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDQ3MDcwLCJpYXQiOjE3NDY5NjA2NzB9.f6Imzjgwir1xwr_Qb69-xDbVQtYyWy4hqbeGItkzIq4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/4/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"4",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get transaction info",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDQ3MDcwLCJpYXQiOjE3NDY5NjA2NzB9.f6Imzjgwir1xwr_Qb69-xDbVQtYyWy4hqbeGItkzIq4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/transactions/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update transaction",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDQ3MDcwLCJpYXQiOjE3NDY5NjA2NzB9.f6Imzjgwir1xwr_Qb69-xDbVQtYyWy4hqbeGItkzIq4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\":150.50, \r\n    \"type\":\"income\", \r\n    \"category\":\"Salary\", \r\n    \"description\":\"Monthly salary\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/transactions/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete transaction",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzQ3MDQ3MDcwLCJpYXQiOjE3NDY5NjA2NzB9.f6Imzjgwir1xwr_Qb69-xDbVQtYyWy4hqbeGItkzIq4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/transactions/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
